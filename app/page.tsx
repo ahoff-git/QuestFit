@@ -1,9 +1,10 @@
 import DataShowcase from '@/app/components/DataShowcase';
-import DesignPrinciples from '@/app/components/DesignPrinciples';
 import FeatureGrid from '@/app/components/FeatureGrid';
 import IntroHero from '@/app/components/IntroHero';
+import ValueCallouts from '@/app/components/ValueCallouts';
 import QuestPlanner from '@/app/components/QuestPlanner';
 import WorkflowTimeline from '@/app/components/WorkflowTimeline';
+import ImplementationGuide from '@/app/components/ImplementationGuide';
 import { loadExerciseList, loadMuscleMap, loadQuestConfigExcerpt } from '@/lib/data-loader';
 import { questConfig } from '@/lib/quest-config';
 import { defaultDailyCheckIn, sampleLogs, sampleUserProfile } from '@/lib/sample-data';
@@ -18,6 +19,7 @@ const HomePage = async () => {
   return (
     <>
       <IntroHero />
+      <ValueCallouts logs={sampleLogs} userProfile={sampleUserProfile} config={questConfig} />
       <FeatureGrid />
       <WorkflowTimeline />
       <QuestPlanner
@@ -33,7 +35,7 @@ const HomePage = async () => {
         muscleMap={muscleMap}
         configSnippet={configSnippet}
       />
-      <DesignPrinciples />
+      <ImplementationGuide />
     </>
   );
 };
