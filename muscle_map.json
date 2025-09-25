@@ -1,0 +1,26 @@
+{
+  "bench_press": {
+    "primary": ["pectoralis_major", "triceps_brachii", "anterior_deltoid"],
+    "synergists": ["serratus_anterior", "biceps_short_head"]
+  },
+  "squat": {
+    "primary": ["quadriceps", "gluteus_maximus", "hamstrings"],
+    "synergists": ["adductors", "calves", "erector_spinae"]
+  },
+  "deadlift": {
+    "primary": ["hamstrings", "gluteus_maximus", "erector_spinae"],
+    "synergists": ["trapezius", "forearms", "latissimus_dorsi"]
+  },
+  "overhead_press": {
+    "primary": ["anterior_deltoid", "triceps_brachii"],
+    "synergists": ["lateral_deltoid", "upper_trapezius"]
+  },
+  "pull_up": {
+    "primary": ["latissimus_dorsi", "biceps_brachii"],
+    "synergists": ["rhomboids", "teres_major", "forearms"]
+  },
+  "plank": {
+    "primary": ["rectus_abdominis", "transverse_abdominis", "obliques"],
+    "synergists": ["gluteus_maximus", "erector_spinae"]
+  }
+}
