@@ -6,6 +6,7 @@ export type Exercise = {
 export type MuscleMapEntry = {
   primary: string[];
   synergists: string[];
+  commonMisfires?: Record<string, string[]>;
 };
 
 export type MuscleMap = Record<string, MuscleMapEntry>;
@@ -43,6 +44,10 @@ export type QuestConfig = {
   sorenessScalingFactor: number;
   cooldownDaysPerMuscle: number;
   deloadAfterDaysMissed: number;
+  weeklySetCap: number;
+  volumePenaltyWeight: number;
+  misfireSupportBoost: number;
+  randomisationTemperature: number;
   repSchemeOptions: Array<{
     label: string;
     reps: [number, number];

@@ -1,26 +1,50 @@
 {
   "bench_press": {
     "primary": ["pectoralis_major", "triceps_brachii", "anterior_deltoid"],
-    "synergists": ["serratus_anterior", "biceps_short_head"]
+    "synergists": ["serratus_anterior", "biceps_short_head"],
+    "commonMisfires": {
+      "anterior_deltoid": ["Reduce elbow flare", "Prioritize scapular retraction"],
+      "upper_trapezius": ["Add band pull-aparts in warm up"]
+    }
   },
   "squat": {
     "primary": ["quadriceps", "gluteus_maximus", "hamstrings"],
-    "synergists": ["adductors", "calves", "erector_spinae"]
+    "synergists": ["adductors", "calves", "erector_spinae"],
+    "commonMisfires": {
+      "lower_back": ["Extend warm-up with cat-cow", "Add core bracing drills"],
+      "knees": ["Use miniband for abduction cues"]
+    }
   },
   "deadlift": {
     "primary": ["hamstrings", "gluteus_maximus", "erector_spinae"],
-    "synergists": ["trapezius", "forearms", "latissimus_dorsi"]
+    "synergists": ["trapezius", "forearms", "latissimus_dorsi"],
+    "commonMisfires": {
+      "upper_trapezius": ["Switch to hook grip or straps"],
+      "hamstrings": ["Prime with light RDL sets"]
+    }
   },
   "overhead_press": {
     "primary": ["anterior_deltoid", "triceps_brachii"],
-    "synergists": ["lateral_deltoid", "upper_trapezius"]
+    "synergists": ["lateral_deltoid", "upper_trapezius"],
+    "commonMisfires": {
+      "upper_trapezius": ["Add face pulls pre-session"],
+      "triceps_brachii": ["Include band pressdowns in warm up"]
+    }
   },
   "pull_up": {
     "primary": ["latissimus_dorsi", "biceps_brachii"],
-    "synergists": ["rhomboids", "teres_major", "forearms"]
+    "synergists": ["rhomboids", "teres_major", "forearms"],
+    "commonMisfires": {
+      "forearms": ["Use neutral grip handles"],
+      "upper_trapezius": ["Add scapular depression drills"]
+    }
   },
   "plank": {
     "primary": ["rectus_abdominis", "transverse_abdominis", "obliques"],
-    "synergists": ["gluteus_maximus", "erector_spinae"]
+    "synergists": ["gluteus_maximus", "erector_spinae"],
+    "commonMisfires": {
+      "lower_back": ["Tuck pelvis slightly", "Add glute bridge activation"],
+      "shoulders": ["Set elbows under shoulders"]
+    }
   }
 }
