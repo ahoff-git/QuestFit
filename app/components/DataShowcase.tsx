@@ -1,4 +1,4 @@
-import type { Exercise, MuscleMap } from '@/lib/data-loader';
+import type { Exercise, MuscleMap } from '@/lib/domain-types';
 
 type DataShowcaseProps = {
   exercises: Exercise[];
