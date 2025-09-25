@@ -8,47 +8,18 @@ import type {
   UserProfile,
   WorkoutLog
 } from './domain-types';
+import { groupLogsByExercise } from './log-helpers';
+import { average, clamp } from './math';
 
 const MILLISECONDS_PER_DAY = 86_400_000;
 
 const parseDate = (value: string) => new Date(`${value}T00:00:00Z`);
-
-const clamp = (value: number, min: number, max: number) =>
-  Math.min(Math.max(value, min), max);
 
 const daysBetween = (later: string, earlier: string) => {
   const laterDate = parseDate(later);
   const earlierDate = parseDate(earlier);
   const diff = laterDate.getTime() - earlierDate.getTime();
   return Math.floor(diff / MILLISECONDS_PER_DAY);
-};
-
-const average = (values: number[]) => {
-  if (values.length === 0) {
-    return 0;
-  }
-
-  const total = values.reduce((sum, value) => sum + value, 0);
-  return total / values.length;
-};
-
-const groupLogsByExercise = (logs: WorkoutLog[]) => {
-  const grouped = new Map<string, WorkoutLog[]>();
-
-  logs.forEach((log) => {
-    const exerciseLogs = grouped.get(log.exerciseId) ?? [];
-    exerciseLogs.push(log);
-    grouped.set(log.exerciseId, exerciseLogs);
-  });
-
-  grouped.forEach((exerciseLogs, key) => {
-    const sortedLogs = [...exerciseLogs].sort((a, b) =>
-      a.date > b.date ? -1 : a.date < b.date ? 1 : 0
-    );
-    grouped.set(key, sortedLogs);
-  });
-
-  return grouped;
 };
 
 const enjoymentBias = (enjoyment: number, config: QuestConfig) => {
@@ -73,6 +44,65 @@ const recencyBoost = (daysSince: number | null, cooldownDays: number) => {
 const sorenessPenalty = (targetMuscles: string[], soreMuscles: string[], scale: number) => {
   const intersects = targetMuscles.some((muscle) => soreMuscles.includes(muscle));
   return intersects ? scale : 1;
+};
+
+const calculateWeeklyVolume = (
+  logs: WorkoutLog[],
+  muscleMap: MuscleMap,
+  referenceDate: string
+) => {
+  const reference = parseDate(referenceDate).getTime();
+  const windowStart = reference - 6 * MILLISECONDS_PER_DAY;
+  const totals = new Map<string, number>();
+
+  logs.forEach((log) => {
+    const timestamp = parseDate(log.date).getTime();
+
+    if (timestamp < windowStart) {
+      return;
+    }
+
+    const mapEntry = muscleMap[log.exerciseId];
+
+    if (!mapEntry) {
+      return;
+    }
+
+    const involvedMuscles = new Set([...mapEntry.primary, ...mapEntry.synergists]);
+
+    involvedMuscles.forEach((muscle) => {
+      const current = totals.get(muscle) ?? 0;
+      totals.set(muscle, current + log.sets);
+    });
+  });
+
+  return totals;
+};
+
+const applyVolumeGuardrail = (
+  primaryMuscles: string[],
+  weeklyVolume: Map<string, number>,
+  config: QuestConfig
+) => {
+  const cap = config.weeklySetCap;
+  const utilisationValues = primaryMuscles.map((muscle) => {
+    const totalSets = weeklyVolume.get(muscle) ?? 0;
+    return totalSets / cap;
+  });
+
+  if (utilisationValues.length === 0) {
+    return 1;
+  }
+
+  const highestUtilisation = Math.max(...utilisationValues);
+
+  if (highestUtilisation <= 0.8) {
+    return 1;
+  }
+
+  const overload = Math.min(highestUtilisation - 0.8, 1);
+  const penalty = 1 - overload * config.volumePenaltyWeight;
+  return clamp(penalty, 0.35, 1);
 };
 
 const pickRepScheme = (index: number, config: QuestConfig) => {
@@ -189,6 +219,17 @@ const collectNotes = ({
     notes.push('Add light activation for support muscles before sets.');
   }
 
+  if (feltMisfire && latest) {
+    const offTargetMuscles = latest.feltIn.filter((muscle) => !muscleMapEntry.primary.includes(muscle));
+    const suggestions = offTargetMuscles
+      .map((muscle) => muscleMapEntry.commonMisfires?.[muscle] ?? [])
+      .flat();
+
+    if (suggestions.length > 0) {
+      notes.push(`Support work: ${suggestions.join(' · ')}`);
+    }
+  }
+
   if (isSore) {
     notes.push('Dial effort back because these muscles are sore.');
   }
@@ -216,6 +257,7 @@ export const generateQuestPlan = ({
   config: QuestConfig;
 }): QuestPlan => {
   const logsByExercise = groupLogsByExercise(logs);
+  const weeklyVolume = calculateWeeklyVolume(logs, muscleMap, checkIn.date);
   const scored: Array<{ recommendation: QuestRecommendation; score: number }> = [];
 
   exercises.forEach((exercise, index) => {
@@ -245,7 +287,14 @@ export const generateQuestPlan = ({
     const recency = recencyBoost(daysSince, config.cooldownDaysPerMuscle);
     const enjoyment = enjoymentBias(averageEnjoyment, config);
     const feelingFactor = checkIn.overallFeeling === 'easy' ? 1.05 : checkIn.overallFeeling === 'hard' ? 0.9 : 1;
-    const score = goalBoost * recency * enjoyment * sorePenalty * feelingFactor;
+    const volumeGuardrail = applyVolumeGuardrail(primaryTargets, weeklyVolume, config);
+    const misfireSupport = progression.targetLoad.includes('Intro')
+      ? 1
+      : (lastLog?.feltIn.some((muscle) => !primaryTargets.includes(muscle)) ?? false)
+        ? config.misfireSupportBoost
+        : 1;
+    const randomiser = 1 + (Math.random() - 0.5) * config.randomisationTemperature;
+    const score = goalBoost * recency * enjoyment * sorePenalty * feelingFactor * volumeGuardrail * misfireSupport * randomiser;
     const focus = `Primary: ${primaryTargets.join(', ')}${mapEntry.synergists.length ? ` · Support: ${mapEntry.synergists.join(', ')}` : ''}`;
     const notes = collectNotes({
       latest: lastLog,
