@@ -1,19 +1,23 @@
 const steps = [
   {
     title: 'Check in',
-    detail: 'Log fatigue, soreness, and focus so the day’s quest starts in the right lane.'
+    detail: 'Athlete records soreness, energy, schedule constraints, and any priorities for the day.',
+    outcome: 'QuestFit converts that snapshot into guardrails for the generator.'
   },
   {
     title: 'Generate the quest',
-    detail: 'Filter unsafe options, weight goals and enjoyment, then pick rep schemes and loads.'
+    detail: 'Engine scores every eligible exercise using goals, cooldown windows, and preference data.',
+    outcome: 'Picks 3-6 lifts with rep schemes, loads, and focus cues in under two seconds.'
   },
   {
     title: 'Complete & log',
-    detail: 'Track sets, RPE, enjoyment, and “felt it in” notes while you train.'
+    detail: 'Athlete logs sets, RPE, enjoyment, and misfire notes from mobile or desktop.',
+    outcome: 'No extra tooling — everything routes back into the quest engine.'
   },
   {
     title: 'Update state',
-    detail: 'Refresh progression curves, adjust enjoyment bias, and queue corrective work if needed.'
+    detail: 'QuestFit recalculates rolling difficulty, volume per muscle, and adherence streaks.',
+    outcome: 'Next session inherits smarter suggestions without anyone exporting spreadsheets.'
   }
 ];
 
@@ -22,12 +26,13 @@ const WorkflowTimeline = () => {
     <div key={step.title}>
       <strong>{step.title}</strong>
       <span>{step.detail}</span>
+      <small>{step.outcome}</small>
     </div>
   ));
 
   return (
     <section aria-labelledby="workflow-title">
-      <h2 id="workflow-title">Quest loop</h2>
+      <h2 id="workflow-title">How a daily quest comes together</h2>
       <div className="table-like">{timeline}</div>
     </section>
   );

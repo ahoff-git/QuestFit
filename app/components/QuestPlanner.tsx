@@ -16,6 +16,7 @@ import { groupLogsByExercise, sortLogsByMostRecent } from '@/lib/log-helpers';
 import { average } from '@/lib/math';
 import { usePersistentState } from '@/lib/persistent-state';
 import { generateQuestPlan } from '@/lib/quest-engine';
+import { formatMuscleName } from '@/lib/format';
 
 type LogDraft = {
   date: string;
@@ -57,12 +58,10 @@ const buildMuscleOptions = (muscleMap: MuscleMap) => {
   return Array.from(muscles).sort((a, b) => a.localeCompare(b));
 };
 
-const formatMuscleLabel = (muscle: string) => muscle.replaceAll('_', ' ');
-
 const formatSummary = (plan: QuestPlan) => {
   const feelingLabel = feelingOptions.find((option) => option.value === plan.summary.feeling)?.label ?? 'Steady day';
   const sorenessLabel = plan.summary.soreMuscles.length > 0
-    ? plan.summary.soreMuscles.map(formatMuscleLabel).join(', ')
+    ? plan.summary.soreMuscles.map(formatMuscleName).join(', ')
     : 'None';
 
   return `${feelingLabel} · Sore: ${sorenessLabel}`;
@@ -287,9 +286,9 @@ const QuestPlanner = ({
           type="checkbox"
           checked={checked}
           onChange={() => toggleSoreMuscle(muscle)}
-          aria-label={formatMuscleLabel(muscle)}
+          aria-label={formatMuscleName(muscle)}
         />
-        <span>{formatMuscleLabel(muscle)}</span>
+        <span>{formatMuscleName(muscle)}</span>
       </label>
     );
   });
@@ -319,9 +318,9 @@ const QuestPlanner = ({
           type="checkbox"
           checked={checked}
           onChange={() => toggleFeltInMuscle(muscle)}
-          aria-label={`Felt it in ${formatMuscleLabel(muscle)}`}
+          aria-label={`Felt it in ${formatMuscleName(muscle)}`}
         />
-        <span>{formatMuscleLabel(muscle)}</span>
+        <span>{formatMuscleName(muscle)}</span>
       </label>
     );
   });
