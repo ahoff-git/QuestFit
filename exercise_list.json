@@ -1,0 +1,17 @@
+[
+  { "id": "bench_press", "label": "Bench Press" },
+  { "id": "squat", "label": "Back Squat" },
+  { "id": "deadlift", "label": "Deadlift" },
+  { "id": "overhead_press", "label": "Overhead Press" },
+  { "id": "pull_up", "label": "Pull-Up" },
+  { "id": "plank", "label": "Plank" },
+  { "id": "dumbbell_fly", "label": "Dumbbell Fly" },
+  { "id": "barbell_row", "label": "Barbell Row" },
+  { "id": "lunge", "label": "Lunge" },
+  { "id": "dip", "label": "Dips" },
+  { "id": "bicep_curl", "label": "Bicep Curl" },
+  { "id": "tricep_extension", "label": "Tricep Extension" },
+  { "id": "leg_raise", "label": "Hanging Leg Raise" },
+  { "id": "shoulder_lateral_raise", "label": "Lateral Raise" },
+  { "id": "calf_raise", "label": "Calf Raise" }
+]
