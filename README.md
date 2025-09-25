@@ -8,6 +8,7 @@ It’s built with **Next.js**, deployable on **Vercel**, and designed to be fast
 ## 🚀 Features
 
 - **Daily quests**: smartly chosen mix of random, goal-biased, enjoyment-weighted, and corrective exercises
+- **Interactive quest builder**: adjust daily check-in sliders to see the plan adapt in real-time
 - **Adaptive progression**: per-exercise scaling using rolling averages of difficulty (RPE), capped for safety
 - **Rep scheme variety**: rotates low-rep/high-weight, mid, and high-rep/low-weight schemes
 - **Daily check-in**: “How are you feeling today?” input to bias quest difficulty and skip sore muscles
@@ -47,7 +48,8 @@ It’s built with **Next.js**, deployable on **Vercel**, and designed to be fast
 
 - `requirements.md` → Detailed functional spec  
 - `quest_config.ts` → Configurable progression settings  
-- `muscle_map.json` (future) → Primary muscles per exercise for corrective logic  
+- `muscle_map.json` (future) → Primary muscles per exercise for corrective logic
+- `lib/sample-data.ts` → Demo training history + default check-in used by the quest builder
 
 ---
 

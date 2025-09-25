@@ -1,18 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-export type Exercise = {
-  id: string;
-  label: string;
-};
-
-export type MuscleMap = Record<
-  string,
-  {
-    primary: string[];
-    synergists: string[];
-  }
->;
+import type { Exercise, MuscleMap } from './domain-types';
 
 const resolveDataPath = (fileName: string) =>
   path.join(process.cwd(), 'data', fileName);
